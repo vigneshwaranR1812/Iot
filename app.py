@@ -121,6 +121,9 @@ def predict_with_model():
     fall="Fall"
     if binary_prediction2[0][0]==0 and binary_prediction1[0][0]==0:
         fall="Not Fall"
+
+
+    print(fall)
     result = {
         'prediction': fall,
         "latitude":lat,
