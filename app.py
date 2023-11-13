@@ -102,6 +102,8 @@ def predict_with_model():
     if gender=='Male':
         g=1
     # Load the model
+    print(g)
+    print(accx,accy,accz,gyrx,gyry,gyrz)
     model1 = tf.keras.models.load_model("Acc.h5")
     single_row_data_acc = np.array([[age,accx,accy, accz, height, weight, g]]).astype("float32")
     single_row_data_acc = single_row_data_acc.reshape(1, 7, 1)
@@ -109,6 +111,7 @@ def predict_with_model():
     # Example with a threshold of 0.5
     threshold = 0.5
     binary_prediction1 = (predictions > threshold).astype(int)
+    print(binary_prediction1[0][0])
     model2 = tf.keras.models.load_model("Gyro.h5")
     single_row_data_gyro = np.array([[age,gyrx,gyry, gyrz, height, weight, g]]).astype("float32")
     single_row_data_gyro = single_row_data_gyro.reshape(1, 7, 1)
@@ -116,6 +119,7 @@ def predict_with_model():
     # Example with a threshold of 0.5
     threshold = 0.5
     binary_prediction2 = (predictions > threshold).astype(int)
+    print(binary_prediction2[0][0])
 
     # Print the binary prediction
     fall="Fall"
