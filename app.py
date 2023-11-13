@@ -84,11 +84,11 @@ def signup():
 @app.route('/api/login', methods=['POST'])
 def login():
     data = request.get_json()
-    username = data.get('name')
+
     phoneNumber = data.get('phoneNumber')
     password = data.get('pass')
     # Find the user in the database
-    user = collection.find_one({'username': username,"phoneNumber":phoneNumber})
+    user = collection.find_one({"phoneNumber":phoneNumber})
     if user and check_password_hash(user['password'], password):
         user_details = {
             'user_id': str(user['_id']),
