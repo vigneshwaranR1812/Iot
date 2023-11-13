@@ -1,6 +1,9 @@
 from flask import Flask, request, jsonify
 from pymongo import MongoClient
 from werkzeug.security import generate_password_hash, check_password_hash
+import tensorflow as tf
+import numpy as np
+
 app = Flask(__name__)
 
 # MongoDB configuration
@@ -28,18 +31,18 @@ except Exception as e:
 def signup():
     data = request.get_json()
     username = data.get('name')
-    phoneNumber = data.get('phoneNumber')
+    phoneNumber = int(data.get('phoneNumber'))
     password = data.get('pass')
-    age = data.get('age')
-    weight = data.get('weight')
-    height = data.get('height')
+    age = int(data.get('age'))
+    weight = int(data.get('weight'))
+    height = int(data.get('height'))
     gender=data.get("gender")
     guardianName = data.get('guardianName')
-    guardianNo = data.get('guardianNo')
+    guardianNo = int(data.get('guardianNo'))
     NeighbourName = data.get('NeighbourName')
-    NeighbourNo=data.get("NeighbourNo")
+    NeighbourNo=int(data.get("NeighbourNo"))
     HospitalName = data.get('HospitalName')
-    HospitalNo=data.get("HospitalNo")
+    HospitalNo=int(data.get("HospitalNo"))
     HospitalPref=data.get("HospPref")
     # print(data)
     
@@ -80,46 +83,51 @@ def signup():
 
     return jsonify({'message': 'User created successfully'}), 201
 
-# @app.route('/api/predict', methods=['POST'])
-# def predict_with_model():
-#     # Load the model
-#     model = tf.keras.models.load_model(model_path)
+@app.route('/api/predict', methods=['POST'])
+def predict_with_model():
+    data = request.get_json()
+    accx = data.get('accx')
+    accx = data.get('accx')
+    accx = data.get('accx')
+    gyrx = data.get('gyrx')
+    gyry = data.get('gyry')
+    gyrz = data.get('gyrz')
+    lat=data.get("lat")
+    long=data.get("long")
+    # Load the model
+    model = tf.keras.models.load_model(model_path)
 
-#     # Prepare input data for prediction
-#     input_features = np.array([input_data['feature1'], input_data['feature2'], ...])  # Adjust based on your features
+    # Prepare input data for prediction
+    input_features = np.array([input_data['feature1'], input_data['feature2'], ...])  # Adjust based on your features
 
-#     # Make predictions
-#     predictions = model.predict(np.expand_dims(input_features, axis=0))
+    # Make predictions
+    predictions = model.predict(np.expand_dims(input_features, axis=0))
 
-#     # You may need to post-process predictions based on your model and task
-#     # For example, convert probabilities to class labels or regression values
+    # You may need to post-process predictions based on your model and task
+    # For example, convert probabilities to class labels or regression values
 
-#     # Prepare the result dictionary
-#     result = {
-#         'prediction': predictions.tolist(),
-#         'class_labels': None,  # Add class labels if applicable
-#         'additional_info': 'Your additional information here',
-#     }
+    # Prepare the result dictionary
+    result = {
+        'prediction': predictions.tolist(),
+        'class_labels': None,  # Add class labels if applicable
+        'additional_info': 'Your additional information here',
+    }
 
-#     return result
+    return result
 
-# # Example usage:
-# input_data = {
-#     'feature1': 0.5,
-#     'feature2': 1.2,
-#     # Add other features as needed
-# }
+# Example usage:
+input_data = {
+    'feature1': 0.5,
+    'feature2': 1.2,
+    # Add other features as needed
+}
 
-# model_path = 'path/to/your/model.h5'
-# prediction_result = predict_with_model(model_path, input_data)
-
-# print(prediction_result)
 
 @app.route('/api/login', methods=['POST'])
 def login():
     data = request.get_json()
 
-    phoneNumber = data.get('phoneNumber')
+    phoneNumber = int(data.get('phoneNumber'))
     password = data.get('pass')
     # Find the user in the database
     user = collection.find_one({"phoneNumber":phoneNumber})
